@@ -1,4 +1,8 @@
+import ClientOnly from './components/ClientOnly'
+import Modal from './components/modals/Modal'
+import RegisterModal from './components/modals/RegisterModal'
 import Navbar from './components/navbar/Navbar'
+import ToasterProvider from './components/providers/ToasterProvider'
 import './globals.css'
 import { Nunito } from 'next/font/google'
 
@@ -17,7 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={nunito.className}>
-        <Navbar></Navbar>
+        <ClientOnly>
+          <ToasterProvider />
+          <Navbar></Navbar>
+          <RegisterModal />
+        </ClientOnly>
         <div>{children}</div>
       </body>
     </html>
