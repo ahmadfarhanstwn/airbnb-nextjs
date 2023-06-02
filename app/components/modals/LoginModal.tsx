@@ -55,8 +55,8 @@ const LoginModal = () => {
     const FooterContent = (
         <div className="flex flex-col gap-4">
             <hr />
-            <Button label="Continue With Google" onClick={() => {}} icon={FcGoogle} outline />
-            <Button label="Continue With Github" onClick={() => {}} icon={AiFillGithub} outline />
+            <Button label="Continue With Google" onClick={() => signIn('google')} icon={FcGoogle} outline />
+            <Button label="Continue With Github" onClick={() => signIn('github')} icon={AiFillGithub} outline />
             <div className="flex flex-row justify-center items-center gap-2">
                 <div>
                     Don't have an account?

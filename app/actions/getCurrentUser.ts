@@ -20,7 +20,12 @@ export const getUserSession = async () => {
 
         if(!currentUser) return null
 
-        return currentUser
+        return {
+            ...currentUser,
+            emailVerified: currentUser.emailVerified?.toISOString() || null,
+            createdAt: currentUser.createdAt.toISOString(),
+            updatedAt: currentUser.updatedAt.toISOString()
+        }
     } catch(err)
     {
         return null

@@ -5,12 +5,12 @@ import Avatar from '../Avatar'
 import React, { useCallback, useState } from 'react'
 import MenuItem from './MenuItem'
 import useRegisterState from '../../hooks/UseRegisterState'
-import useLoginState from '../../hooks/UseLoginState'
-import { User } from '@prisma/client'
 import { signOut } from 'next-auth/react'
+import { SafeUser } from '../../types'
+import useLoginState from '../../hooks/UseLoginState'
 
 interface UserMenuProps{
-    currentUser : User | null
+    currentUser : SafeUser | null
 }
 
 const UserMenu : React.FC<UserMenuProps> = ({currentUser}) => {
@@ -34,7 +34,7 @@ const UserMenu : React.FC<UserMenuProps> = ({currentUser}) => {
                         <AiOutlineMenu />
                 </div>
                 <div className='hidden md:block'>
-                    <Avatar />
+                    <Avatar src={currentUser?.image} />
                 </div>
                 {isOpen && (
                     <div className='absolute rounded-xl shadow-md w-[40vw] md:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm'>
