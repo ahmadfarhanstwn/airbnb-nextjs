@@ -2,12 +2,20 @@
 
 import {AiOutlineMenu} from 'react-icons/ai'
 import Avatar from '../Avatar'
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import MenuItem from './MenuItem'
 import useRegisterState from '../../hooks/UseRegisterState'
+import useLoginState from '../../hooks/UseLoginState'
+import { User } from '@prisma/client'
+import { signOut } from 'next-auth/react'
 
-const UserMenu = () => {
+interface UserMenuProps{
+    currentUser : User | null
+}
+
+const UserMenu : React.FC<UserMenuProps> = ({currentUser}) => {
     const registerState = useRegisterState()
+    const loginState = useLoginState()
 
     const [isOpen, setIsOpen] = useState(false)
 
@@ -31,10 +39,21 @@ const UserMenu = () => {
                 {isOpen && (
                     <div className='absolute rounded-xl shadow-md w-[40vw] md:w-3/4 bg-white overflow-hidden right-0 top-12 text-sm'>
                         <div className='flex flex-col cursor-pointer'>
-                            <>
-                                <MenuItem onClick={() => {}} label='Sign In' />
-                                <MenuItem onClick={registerState.onOpen} label='Sign Up' />
-                            </>
+                            {currentUser ? 
+                                <>
+                                    <MenuItem onClick={() => {}} label='My Trips' />
+                                    <MenuItem onClick={() => {}} label='My Favorites' />
+                                    <MenuItem onClick={() => {}} label='My Reservations' />
+                                    <MenuItem onClick={() => {}} label='My Properties' />
+                                    <MenuItem onClick={() => {}} label='Airbnb My Home' />
+                                    <MenuItem onClick={() => signOut()} label='Sign Out' />
+                                </>
+                            : 
+                                <>
+                                    <MenuItem onClick={loginState.onOpen} label='Sign In' />
+                                    <MenuItem onClick={registerState.onOpen} label='Sign Up' />
+                                </>
+                            }
                         </div>
                     </div>
                 )}
