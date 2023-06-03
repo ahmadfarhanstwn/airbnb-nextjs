@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import useRegisterState from "../../hooks/UseRegisterState"
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form"
 import axios from "axios"
@@ -12,10 +12,12 @@ import Button from "../Button"
 import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub } from 'react-icons/ai'
 import { signIn } from "next-auth/react"
+import useLoginState from "../../hooks/UseLoginState"
 
 const RegisterModal = () => {
     const [isLoading, setIsLoading] = useState(false)
     const registerState = useRegisterState()
+    const loginState = useLoginState()
 
     const {register, handleSubmit, formState: {errors}} = useForm<FieldValues>({
         defaultValues: {
@@ -38,6 +40,11 @@ const RegisterModal = () => {
             })
     } 
 
+    const handleGoToLogin = useCallback(() => {
+        registerState.onClose()
+        loginState.onOpen()
+    }, [loginState, registerState])
+
     const BodyContent = (
         <div className="flex flex-col gap-4">
             <Heading title="Welcome to Airbnb" subtitle="Create an account!" center />
@@ -56,7 +63,7 @@ const RegisterModal = () => {
                 <div>
                     Already have an account?
                 </div>
-                <div onClick={registerState.onClose} className="text-neutral-800 cursor-pointer hover:underline">
+                <div onClick={handleGoToLogin} className="text-neutral-800 cursor-pointer hover:underline">
                     Sign In
                 </div>
             </div>

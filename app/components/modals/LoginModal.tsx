@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { useForm, FieldValues, SubmitHandler } from "react-hook-form"
 import Modal from "./Modal"
 import Heading from "../Heading"
@@ -12,10 +12,14 @@ import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub } from 'react-icons/ai'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import useRegisterState from "../../hooks/UseRegisterState"
 
 const LoginModal = () => {
     const [isLoading, setIsLoading] = useState(false)
+
     const loginState = useLoginState()
+    const registerState = useRegisterState()
+
     const router = useRouter()
 
     const {register, handleSubmit, formState: {errors}} = useForm<FieldValues>({
@@ -44,6 +48,11 @@ const LoginModal = () => {
         })
     } 
 
+    const handleGoToSignUp = useCallback(() => {
+        loginState.onClose()
+        registerState.onOpen()
+    }, [loginState, registerState])
+
     const BodyContent = (
         <div className="flex flex-col gap-4">
             <Heading title="Welcome back" subtitle="Let's Sign In!" center />
@@ -61,7 +70,7 @@ const LoginModal = () => {
                 <div>
                     Don't have an account?
                 </div>
-                <div onClick={loginState.onClose} className="text-neutral-800 cursor-pointer hover:underline">
+                <div onClick={handleGoToSignUp} className="text-neutral-800 cursor-pointer hover:underline">
                     Sign Up
                 </div>
             </div>
