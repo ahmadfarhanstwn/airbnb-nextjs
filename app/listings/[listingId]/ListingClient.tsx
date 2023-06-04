@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { SafeListing, SafeUser } from "../../types"
+import { SafeListing, SafeReservation, SafeUser } from "../../types"
 import { Reservation } from "@prisma/client"
 import { categoriesList } from "../../components/navbar/Categories"
 import Container from "../../components/Container"
@@ -22,7 +22,7 @@ const initialDateRange = {
 }
 
 interface ListingClientProps {
-    reservations?: Reservation[],
+    reservations?: SafeReservation[],
     listing: SafeListing & {
         user: SafeUser
     },
@@ -36,7 +36,7 @@ const ListingClient: React.FC<ListingClientProps> = ({reservations = [], listing
     const disabledDates = useMemo(() => {
         let dates: Date[] = []
 
-        reservations.forEach((reservation: Reservation) => {
+        reservations.forEach((reservation: SafeReservation) => {
             const range = eachDayOfInterval({
                 start: new Date(reservation.startDate),
                 end: new Date(reservation.endDate)
@@ -52,12 +52,12 @@ const ListingClient: React.FC<ListingClientProps> = ({reservations = [], listing
     const [totalPrice, setTotalPrice] = useState(listing.price)
     const [dateRange, setDateRange] = useState<Range>(initialDateRange)
 
-    const onCreateReservation = useCallback(() => {
+    const onCreateReservation = useCallback(async () => {
         if (!currentUser) return loginState.onOpen()
 
         setIsLoading(true)
 
-        axios.post('/api/reservations', {
+        await axios.post('/api/reservations', {
             totalPrice,
             startDate: dateRange.startDate,
             endDate: dateRange.endDate,
