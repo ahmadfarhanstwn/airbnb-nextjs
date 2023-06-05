@@ -9,6 +9,7 @@ import { signOut } from 'next-auth/react'
 import { SafeUser } from '../../types'
 import useLoginState from '../../hooks/UseLoginState'
 import useRentState from '../../hooks/UseRentState'
+import { useRouter } from 'next/navigation'
 
 interface UserMenuProps{
     currentUser : SafeUser | null
@@ -18,6 +19,7 @@ const UserMenu : React.FC<UserMenuProps> = ({currentUser}) => {
     const registerState = useRegisterState()
     const loginState = useLoginState()
     const rentState = useRentState()
+    const router = useRouter()
 
     const [isOpen, setIsOpen] = useState(false)
 
@@ -52,7 +54,7 @@ const UserMenu : React.FC<UserMenuProps> = ({currentUser}) => {
                         <div className='flex flex-col cursor-pointer'>
                             {currentUser ? 
                                 <>
-                                    <MenuItem onClick={() => {}} label='My Trips' />
+                                    <MenuItem onClick={() => router.push('/trips')} label='My Trips' />
                                     <MenuItem onClick={() => {}} label='My Favorites' />
                                     <MenuItem onClick={() => {}} label='My Reservations' />
                                     <MenuItem onClick={() => {}} label='My Properties' />
